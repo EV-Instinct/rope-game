@@ -69,32 +69,35 @@ export class Rope {
 
     // 根据绳索 ID 设置初始三维层叠倾向 (Layer Ordering)，防止初始交叉穿模
     let layerZOffset = 0.0;
-    if (this.id === 6) layerZOffset = 0.16; // 紫6在顶部跨越
-    else if (this.id === 1) layerZOffset = 0.12; // 绿1在上层跨越
-    else if (this.id === 2) layerZOffset = 0.08; // 蓝2在中层
-    else if (this.id === 5) layerZOffset = 0.02; // 橙5在底层
+    if (this.id === 6) layerZOffset = 0.06; // 紫6在顶部跨越
+    else if (this.id === 1) layerZOffset = 0.04; // 绿1在上层跨越
+    else if (this.id === 2) layerZOffset = 0.02; // 蓝2在中层
+    else if (this.id === 5) layerZOffset = 0.00; // 橙5在底层
 
     // 在两端点间按直线并施加初始微拱高插值质点
     for (let i = 0; i < this.numParticles; i++) {
       const alpha = i / (this.numParticles - 1);
       const pos = new THREE.Vector3().lerpVectors(start, end, alpha);
 
-      // 给中间质点微小 Z 抬升，确保初始处于布面上方并有层次感
-      const archZ = Math.sin(alpha * Math.PI) * (0.16 + layerZOffset) + this.radius;
-      pos.z = Math.max(pos.z, archZ);
+      // 给中间质点微小 Z 抬升，确保处于布面上方并有层次感，最高峰在 0.16 左右，稳在纽扣 (0.22) 之下
+      const archZ = Math.sin(alpha * Math.PI) * (0.07 + layerZOffset) + this.radius;
+      pos.z = Math.max(0.04, archZ);
 
       // 初始螺旋麻花编织位移 (Double Helix Twist - 专为红4与粉3设计)
       if (config.twistTurns) {
         const twistPhase = alpha * Math.PI * 2.0 * config.twistTurns;
-        const twistAmp = Math.sin(alpha * Math.PI) * 0.35;
+        const twistAmp = Math.sin(alpha * Math.PI) * 0.22;
         pos.addScaledVector(perp, Math.sin(twistPhase) * twistAmp);
-        pos.z += Math.cos(twistPhase) * twistAmp * 0.9;
+        pos.z += Math.cos(twistPhase) * twistAmp * 0.35;
       }
 
       pos.z = Math.max(pos.z, this.radius);
 
       // 端点初始固定 (invMass = 0)
       const isEndpoint = (i === 0 || i === this.numParticles - 1);
+      if (isEndpoint) {
+        pos.z = 0.04;
+      }
       const invMass = isEndpoint ? 0.0 : 1.0;
 
       const p = new Particle(pos.x, pos.y, pos.z, invMass, this.radius);

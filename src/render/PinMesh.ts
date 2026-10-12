@@ -13,8 +13,8 @@ export class PinMesh {
 
   private cylinderMesh: THREE.Mesh;
   private targetPosition: THREE.Vector3 = new THREE.Vector3();
-  private baseZ: number = 0.10; // 稳居绳体上方，确保纽扣与数字清晰可见，不被绳头掩盖
-  private liftZ: number = 0.35; // 拖拽时拔起高度
+  private baseZ: number = 0.22; // 稳居绳体上方，确保纽扣与数字清晰可见，不被绳头掩盖
+  private liftZ: number = 0.46; // 拖拽时拔起高度
 
   constructor(ropeId: number, endType: 'A' | 'B', color: string, position: THREE.Vector3) {
     this.ropeId = ropeId;
@@ -37,12 +37,27 @@ export class PinMesh {
       roughness: 0.25,
       metalness: 0.08
     });
+    matSide.polygonOffset = true;
+    matSide.polygonOffsetFactor = -2.0;
+    matSide.polygonOffsetUnits = -2.0;
 
     this.cylinderMesh = new THREE.Mesh(cylGeo, matSide);
     this.cylinderMesh.castShadow = true;
     this.cylinderMesh.receiveShadow = true;
-    this.cylinderMesh.renderOrder = 14;
+    this.cylinderMesh.renderOrder = 20;
     this.group.add(this.cylinderMesh);
+
+    // 1.5 金属插针 (从底面延伸至绣布孔眼内 Z=0，防止悬浮感，使纽扣牢牢扎根于孔位)
+    const stemGeo = new THREE.CylinderGeometry(0.024, 0.024, 0.25, 16);
+    stemGeo.rotateX(Math.PI / 2);
+    const stemMat = new THREE.MeshStandardMaterial({
+      color: 0x9aa2af,
+      roughness: 0.3,
+      metalness: 0.7
+    });
+    const stemMesh = new THREE.Mesh(stemGeo, stemMat);
+    stemMesh.position.z = -0.11;
+    this.group.add(stemMesh);
 
     // 2. 顶部正立编号圆盘 (CircleGeometry 天然正立、无镜像、无 UV 扭曲，自带球光镜面质感)
     const numTexture = this.createNumberTexture(ropeId, color);
@@ -52,11 +67,15 @@ export class PinMesh {
       roughness: 0.18,
       metalness: 0.02
     });
+    discMat.polygonOffset = true;
+    discMat.polygonOffsetFactor = -4.0;
+    discMat.polygonOffsetUnits = -4.0;
+
     const discMesh = new THREE.Mesh(discGeo, discMat);
     discMesh.position.z = pinHeight * 0.5 + 0.002;
     discMesh.castShadow = true;
     discMesh.receiveShadow = true;
-    discMesh.renderOrder = 15;
+    discMesh.renderOrder = 25;
     this.group.add(discMesh);
 
     // 3. 触控拾取判定盒 (Hitbox)，精确适配 22 孔位避免重叠
@@ -89,7 +108,11 @@ export class PinMesh {
    */
   public getAttachmentPosition(out: THREE.Vector3): THREE.Vector3 {
     out.copy(this.group.position);
-    out.z = Math.max(0.08, this.group.position.z - 0.14);
+    if (this.isDragging) {
+      out.z = Math.max(0.12, this.group.position.z - 0.16);
+    } else {
+      out.z = 0.04; // 静止时牢牢深扎在孔眼底部，永远位于纽扣帽头下方
+    }
     return out;
   }
 

@@ -128,6 +128,7 @@ class GameApp {
     this.ropeRenderers = [];
     this.pins = [];
     this.solver.clear();
+    this.solver.pins = [];
     this.embroideryEffect.reset();
     this.untangledCount = 0;
     this.updateCounterUI();
@@ -174,6 +175,9 @@ class GameApp {
       this.scene.add(pinB.group);
       this.pins.push(pinA, pinB);
     }
+
+    // 挂载纽扣障碍物至物理求解器，启用全自动物理避让排斥
+    this.solver.pins = this.pins;
 
     this.updateCounterUI();
 

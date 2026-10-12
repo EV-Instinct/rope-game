@@ -2,12 +2,19 @@ import * as THREE from 'three';
 import { Rope } from './Rope.ts';
 import { SegmentCollision } from './SegmentCollision.ts';
 
+export interface PinObstacle {
+  group: THREE.Group;
+  ropeId: number;
+  endType: 'A' | 'B';
+}
+
 /**
  * XPBD 绳索系统物理求解器 (XPBD Rope Physics Solver)
  * 多子步迭代，保证极致稳定、无穿模、支持多绳紧密缠绕
  */
 export class RopeSolver {
   public ropes: Rope[] = [];
+  public pins: PinObstacle[] = [];    // 孔位纽扣障碍物列表，用于施加径向避让排斥
   public substeps: number = 8;        // 子步数，保证碰撞精度与防穿透
   public gravity: THREE.Vector3 = new THREE.Vector3(0, 0, -1.8); // 柔和下压重力，贴合绣布
   public damping: number = 0.03;      // 空气阻尼
@@ -139,6 +146,43 @@ export class RopeSolver {
 
             // 精确线段对距离求解与排斥投影
             SegmentCollision.solveSegmentPair(a1, a2, b1, b2, minDist);
+          }
+        }
+      }
+    }
+
+    // 2. 纽扣圆柱刚体障碍物排斥 (防止任何绳索从别的纽扣上方跨越，使其自然从侧边滑开)
+    const obstacleRadius = 0.175; // 纽扣半径 (0.108) + 绳索半径 (0.065)
+    for (const rope of activeRopes) {
+      const pCount = rope.particles.length;
+      for (const pin of this.pins) {
+        if (!pin.group.visible) continue;
+        const pinPos = pin.group.position;
+        const isConnectedPin = (pin.ropeId === rope.id);
+
+        for (let idx = 1; idx < pCount - 1; idx++) {
+          // 如果是本绳索连接的端点纽扣，放行临近端点的两三个质点
+          if (isConnectedPin) {
+            if (pin.endType === 'A' && idx <= 2) continue;
+            if (pin.endType === 'B' && idx >= pCount - 3) continue;
+          }
+
+          const p = rope.particles[idx];
+          if (p.invMass === 0) continue;
+
+          const dx = p.position.x - pinPos.x;
+          const dy = p.position.y - pinPos.y;
+          const distSq = dx * dx + dy * dy;
+
+          if (distSq < obstacleRadius * obstacleRadius && distSq > 1e-6) {
+            const dist = Math.sqrt(distSq);
+            const factor = (obstacleRadius - dist) / dist;
+            p.position.x += dx * factor;
+            p.position.y += dy * factor;
+            // 限制 Z 轴高度不超过纽扣底座
+            if (p.position.z > pinPos.z - 0.04) {
+              p.position.z = pinPos.z - 0.04;
+            }
           }
         }
       }

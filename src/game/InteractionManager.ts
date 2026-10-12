@@ -191,7 +191,7 @@ export class InteractionManager {
         this.board.slots[oldSlotIndex].occupiedBy = null;
         targetSlot.occupiedBy = { ropeId: rope.id, endType: endType };
 
-        const snapPos = new THREE.Vector3(targetSlot.position.x, targetSlot.position.y, 0.1);
+        const snapPos = new THREE.Vector3(targetSlot.position.x, targetSlot.position.y, 0.04);
         if (endType === 'A') {
           rope.pegAIndex = newSlotIndex;
           rope.updateAnchorA(snapPos);
@@ -212,7 +212,7 @@ export class InteractionManager {
       } else {
         // 弹回/放回原生孔位
         const originSlot = this.board.slots[oldSlotIndex];
-        const originPos = new THREE.Vector3(originSlot.position.x, originSlot.position.y, 0.1);
+        const originPos = new THREE.Vector3(originSlot.position.x, originSlot.position.y, 0.04);
         if (endType === 'A') {
           rope.updateAnchorA(originPos);
         } else {
@@ -226,7 +226,7 @@ export class InteractionManager {
     } else {
       // 未达到吸附距离，弹回原生孔位
       const originSlot = this.board.slots[this.originalSlotIndex];
-      const originPos = new THREE.Vector3(originSlot.position.x, originSlot.position.y, 0.1);
+      const originPos = new THREE.Vector3(originSlot.position.x, originSlot.position.y, 0.04);
       if (endType === 'A') {
         rope.updateAnchorA(originPos);
       } else {

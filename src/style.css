@@ -1,0 +1,283 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #242220;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  touch-action: none;
+}
+
+#app {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  max-width: 540px;
+  max-height: 960px;
+  margin: 0 auto;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: #f7ede2;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  cursor: none !important;
+}
+
+#app * {
+  cursor: none !important;
+}
+
+@media (min-aspect-ratio: 9/16) {
+  #app {
+    height: 100vh;
+    width: calc(100vh * 9 / 16);
+  }
+}
+
+/* Virtual Finger Cursor (10.11 自定义拟真手指鼠标) */
+.virtual-cursor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 125px;
+  height: 120px;
+  pointer-events: none;
+  z-index: 9999;
+  will-change: transform;
+  transform: translate3d(-150px, -150px, 0);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  filter: drop-shadow(3px 8px 16px rgba(0, 0, 0, 0.38));
+}
+
+.virtual-cursor.active {
+  opacity: 1;
+}
+
+.cursor-img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+  /* 食指指尖位于 (8, 0) / (379, 366)，即 2.1% 0% */
+  transform-origin: 2.1% 0%;
+  transition: transform 0.12s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.12s ease;
+}
+
+.virtual-cursor.hovering .cursor-img {
+  transform: scale(1.06);
+  filter: brightness(1.08) drop-shadow(0 0 6px rgba(255, 215, 0, 0.5));
+}
+
+.virtual-cursor.pressed .cursor-img {
+  transform: scale(0.90) rotate(-3deg);
+}
+
+/* 3D Canvas */
+#canvas-container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  touch-action: none;
+}
+
+#canvas-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+/* UI Overlay - 居于顶部金底艺术字通栏两侧，完美契合国风原画 */
+.ui-overlay {
+  position: absolute;
+  top: 16px;
+  left: 14px;
+  right: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(85, 45, 10, 0.78);
+  backdrop-filter: blur(8px);
+  color: #fff9e6;
+  padding: 5px 13px;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  border: 1.5px solid #d4af37;
+  letter-spacing: 0.5px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  pointer-events: auto;
+}
+
+.control-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 248, 230, 0.94);
+  border: 1.5px solid #d4af37;
+  color: #6d4207;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.18);
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.control-btn:active {
+  transform: scale(0.92);
+  background: #ffe082;
+}
+
+
+/* Companion Girl with Cat (1:1 视频右下角摇椅小女孩与黑猫) */
+.companion-wrapper {
+  position: absolute;
+  bottom: -4px;
+  right: 4px;
+  width: 105px;
+  height: 135px;
+  z-index: 15;
+  pointer-events: none;
+  transform-origin: 50% 90%;
+  animation: chairRocking 4.2s ease-in-out infinite;
+}
+
+.companion-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.28));
+}
+
+@keyframes chairRocking {
+  0%, 100% {
+    transform: rotate(-2deg) translateY(0);
+  }
+  50% {
+    transform: rotate(2.5deg) translateY(-2px);
+  }
+}
+
+/* Bottom Disclaimer (1:1 视频底标) */
+.disclaimer-text {
+  position: absolute;
+  bottom: 4px;
+  left: 14px;
+  font-size: 0.58rem;
+  color: rgba(100, 80, 60, 0.7);
+  pointer-events: none;
+  z-index: 15;
+  max-width: 60%;
+  line-height: 1.25;
+}
+
+/* Toast Message */
+.toast {
+  position: absolute;
+  top: 75px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(30, 20, 15, 0.85);
+  color: #ffe6a7;
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  z-index: 30;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.toast.hidden {
+  opacity: 0;
+  transform: translate(-50%, -10px);
+}
+
+/* Victory Modal */
+.modal {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  transition: opacity 0.4s ease;
+}
+
+.modal.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.modal-card {
+  background: linear-gradient(145deg, #fffbf0 0%, #fff0d4 100%);
+  padding: 30px 24px;
+  border-radius: 24px;
+  text-align: center;
+  max-width: 320px;
+  width: 85%;
+  border: 3px solid #d4af37;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+  transform: scale(1);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.modal.hidden .modal-card {
+  transform: scale(0.8);
+}
+
+.modal-title {
+  font-size: 1.5rem;
+  color: #a44200;
+  margin-bottom: 10px;
+  font-weight: 800;
+}
+
+.modal-desc {
+  font-size: 0.95rem;
+  color: #634d3b;
+  line-height: 1.5;
+  margin-bottom: 22px;
+}
+
+.replay-btn {
+  background: linear-gradient(135deg, #ff9800 0%, #e65100 100%);
+  color: #ffffff;
+  border: none;
+  font-size: 1.05rem;
+  font-weight: 700;
+  padding: 12px 32px;
+  border-radius: 25px;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(230, 81, 0, 0.4);
+  transition: transform 0.15s ease;
+}
+
+.replay-btn:active {
+  transform: scale(0.95);
+}

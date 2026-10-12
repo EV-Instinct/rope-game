@@ -1,0 +1,233 @@
+[
+  {
+    "id": 1,
+    "name": "心形礼盒",
+    "px": 539.0,
+    "py": 605.2,
+    "wx": -0.0042,
+    "wy": 1.4581,
+    "bbox": [
+      425,
+      467,
+      662,
+      726
+    ],
+    "size": [
+      238,
+      260
+    ],
+    "theme_color": "#f43f5e",
+    "lineart_url": "./motifs/motif_1_lineart.png",
+    "embroidered_url": "./motifs/motif_1_embroidered.png"
+  },
+  {
+    "id": 2,
+    "name": "玫瑰花篮",
+    "px": 783.7,
+    "py": 689.5,
+    "wx": 1.0017,
+    "wy": 1.1116,
+    "bbox": [
+      682,
+      546,
+      904,
+      803
+    ],
+    "size": [
+      223,
+      258
+    ],
+    "theme_color": "#10b981",
+    "lineart_url": "./motifs/motif_2_lineart.png",
+    "embroidered_url": "./motifs/motif_2_embroidered.png"
+  },
+  {
+    "id": 3,
+    "name": "方形礼盒",
+    "px": 924.8,
+    "py": 866.3,
+    "wx": 1.5815,
+    "wy": 0.385,
+    "bbox": [
+      810,
+      768,
+      1039,
+      971
+    ],
+    "size": [
+      230,
+      204
+    ],
+    "theme_color": "#a855f7",
+    "lineart_url": "./motifs/motif_3_lineart.png",
+    "embroidered_url": "./motifs/motif_3_embroidered.png"
+  },
+  {
+    "id": 4,
+    "name": "小熊花篮",
+    "px": 935.2,
+    "py": 1093.8,
+    "wx": 1.6242,
+    "wy": -0.5498,
+    "bbox": [
+      825,
+      991,
+      1057,
+      1198
+    ],
+    "size": [
+      233,
+      208
+    ],
+    "theme_color": "#f59e0b",
+    "lineart_url": "./motifs/motif_4_lineart.png",
+    "embroidered_url": "./motifs/motif_4_embroidered.png"
+  },
+  {
+    "id": 5,
+    "name": "爱心情书",
+    "px": 859.2,
+    "py": 1308.4,
+    "wx": 1.3117,
+    "wy": -1.4318,
+    "bbox": [
+      736,
+      1206,
+      972,
+      1399
+    ],
+    "size": [
+      237,
+      194
+    ],
+    "theme_color": "#ef4444",
+    "lineart_url": "./motifs/motif_5_lineart.png",
+    "embroidered_url": "./motifs/motif_5_embroidered.png"
+  },
+  {
+    "id": 6,
+    "name": "羽翼小熊",
+    "px": 652.9,
+    "py": 1424.9,
+    "wx": 0.464,
+    "wy": -1.9107,
+    "bbox": [
+      549,
+      1307,
+      764,
+      1546
+    ],
+    "size": [
+      216,
+      240
+    ],
+    "theme_color": "#f97316",
+    "lineart_url": "./motifs/motif_6_lineart.png",
+    "embroidered_url": "./motifs/motif_6_embroidered.png"
+  },
+  {
+    "id": 7,
+    "name": "玫瑰手捧花",
+    "px": 419.1,
+    "py": 1409.6,
+    "wx": -0.497,
+    "wy": -1.8479,
+    "bbox": [
+      316,
+      1314,
+      528,
+      1530
+    ],
+    "size": [
+      213,
+      217
+    ],
+    "theme_color": "#ea580c",
+    "lineart_url": "./motifs/motif_7_lineart.png",
+    "embroidered_url": "./motifs/motif_7_embroidered.png"
+  },
+  {
+    "id": 8,
+    "name": "心形巧克力",
+    "px": 227.7,
+    "py": 1298.4,
+    "wx": -1.2836,
+    "wy": -1.3908,
+    "bbox": [
+      138,
+      1210,
+      332,
+      1381
+    ],
+    "size": [
+      195,
+      172
+    ],
+    "theme_color": "#e11d48",
+    "lineart_url": "./motifs/motif_8_lineart.png",
+    "embroidered_url": "./motifs/motif_8_embroidered.png"
+  },
+  {
+    "id": 9,
+    "name": "福袋礼包",
+    "px": 125.2,
+    "py": 1086.5,
+    "wx": -1.7046,
+    "wy": -0.5199,
+    "bbox": [
+      32,
+      963,
+      216,
+      1196
+    ],
+    "size": [
+      185,
+      234
+    ],
+    "theme_color": "#0284c7",
+    "lineart_url": "./motifs/motif_9_lineart.png",
+    "embroidered_url": "./motifs/motif_9_embroidered.png"
+  },
+  {
+    "id": 10,
+    "name": "小熊挂件",
+    "px": 171.1,
+    "py": 858.8,
+    "wx": -1.5162,
+    "wy": 0.4161,
+    "bbox": [
+      94,
+      721,
+      239,
+      952
+    ],
+    "size": [
+      146,
+      232
+    ],
+    "theme_color": "#d97706",
+    "lineart_url": "./motifs/motif_10_lineart.png",
+    "embroidered_url": "./motifs/motif_10_embroidered.png"
+  },
+  {
+    "id": 11,
+    "name": "玫瑰蛋糕",
+    "px": 281.9,
+    "py": 666.3,
+    "wx": -1.0607,
+    "wy": 1.2072,
+    "bbox": [
+      142,
+      555,
+      458,
+      786
+    ],
+    "size": [
+      317,
+      232
+    ],
+    "theme_color": "#ec4899",
+    "lineart_url": "./motifs/motif_11_lineart.png",
+    "embroidered_url": "./motifs/motif_11_embroidered.png"
+  }
+]

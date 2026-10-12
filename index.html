@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>国风刺绣解绳子 - Embroidery Tangle 3D</title>
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧵</text></svg>" />
+  <link rel="stylesheet" href="./src/style.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- Top Banner (已整合至 10.11 board_bg.png 主图顶部自带艺术字，HTML层保持隐匿) -->
+
+    <!-- 3D Canvas Container -->
+    <div id="canvas-container"></div>
+
+    <!-- Virtual Finger Cursor (10.11 拟真手指鼠标指针) -->
+    <div id="virtual-cursor" class="virtual-cursor">
+      <img src="./finger_cursor.png" alt="手指光标" class="cursor-img" />
+    </div>
+
+    <!-- UI Overlay Controls -->
+    <div class="ui-overlay">
+      <div class="level-indicator">
+        <span class="status-badge" id="untangled-counter">已解开 0 / 6 条丝线</span>
+      </div>
+      <div class="action-buttons">
+        <button id="btn-reset" class="control-btn" title="重新开始">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+        </button>
+        <button id="btn-sound" class="control-btn" title="音效开关">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Companion Animation (Girl with cat on rocking chair 1:1) -->
+    <div class="companion-wrapper">
+      <img src="./companion_girl.png" alt="伴玩小女孩与黑猫" class="companion-img" />
+    </div>
+
+    <!-- Bottom Disclaimer (1:1 视频底标) -->
+    <div class="disclaimer-text">
+      广告创意仅供参考，实际内容以游戏内为准，相关场景需到一定条件后触发
+    </div>
+
+    <!-- Toast / Prompt -->
+    <div id="toast-message" class="toast hidden"></div>
+
+    <!-- Victory Modal -->
+    <div id="victory-modal" class="modal hidden">
+      <div class="modal-card">
+        <h2 class="modal-title">🎉 刺绣完成！</h2>
+        <p class="modal-desc">浪漫刺绣栩栩如生，所有丝线已全部完美解开！</p>
+        <button id="btn-replay" class="replay-btn">再玩一次</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="./src/main.ts"></script>
+</body>
+</html>

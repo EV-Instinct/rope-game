@@ -271,9 +271,9 @@ export class InteractionManager {
     if (this.selectedPin && this.selectedRope) {
       this.selectedPin.getAttachmentPosition(this.planeIntersect);
       if (this.selectedPin.endType === 'A') {
-        this.selectedRope.updateAnchorA(this.planeIntersect);
+        this.selectedRope.updateAnchorA(this.planeIntersect, true);
       } else {
-        this.selectedRope.updateAnchorB(this.planeIntersect);
+        this.selectedRope.updateAnchorB(this.planeIntersect, true);
       }
     }
   }

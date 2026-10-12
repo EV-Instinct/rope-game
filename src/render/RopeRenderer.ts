@@ -26,7 +26,10 @@ export class RopeRenderer {
       sheenColor: sheenColor,
       clearcoat: 0.15,
       clearcoatRoughness: 0.25,
-      side: THREE.DoubleSide
+      side: THREE.DoubleSide,
+      polygonOffset: true,
+      polygonOffsetFactor: 3.0,
+      polygonOffsetUnits: 3.0
     });
 
     if (normalMap) {

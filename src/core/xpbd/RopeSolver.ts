@@ -86,12 +86,6 @@ export class RopeSolver {
           p.velocity.x *= (1.0 - this.clothFriction);
           p.velocity.y *= (1.0 - this.clothFriction);
         }
-
-        // 绳身平顺贴布，物理上限限制在 0.082，绝对低于原版纽扣底盘 (Z=0.10)，杜绝任何反弹浮起
-        if (p.position.z > 0.082) {
-          p.position.z = 0.082;
-          p.velocity.z = 0;
-        }
       }
     }
   }
@@ -152,43 +146,6 @@ export class RopeSolver {
 
             // 精确线段对距离求解与排斥投影
             SegmentCollision.solveSegmentPair(a1, a2, b1, b2, minDist);
-          }
-        }
-      }
-    }
-
-    // 2. 纽扣圆柱刚体障碍物排斥 (防止任何绳索从别的纽扣上方跨越，使其自然从侧边滑开)
-    const obstacleRadius = 0.185; // 纽扣半径 (0.108) + 绳索半径 (0.065) + 缓冲
-    for (const rope of activeRopes) {
-      const pCount = rope.particles.length;
-      for (const pin of this.pins) {
-        if (!pin.group.visible) continue;
-        const pinPos = pin.group.position;
-        const isConnectedPin = (pin.ropeId === rope.id);
-
-        for (let idx = 1; idx < pCount - 1; idx++) {
-          // 如果是本绳索连接的端点纽扣，放行临近端点的两三个质点
-          if (isConnectedPin) {
-            if (pin.endType === 'A' && idx <= 2) continue;
-            if (pin.endType === 'B' && idx >= pCount - 3) continue;
-          }
-
-          const p = rope.particles[idx];
-          if (p.invMass === 0) continue;
-
-          const dx = p.position.x - pinPos.x;
-          const dy = p.position.y - pinPos.y;
-          const distSq = dx * dx + dy * dy;
-
-          if (distSq < obstacleRadius * obstacleRadius && distSq > 1e-6) {
-            const dist = Math.sqrt(distSq);
-            const factor = (obstacleRadius - dist) / dist;
-            p.position.x += dx * factor;
-            p.position.y += dy * factor;
-            // 靠近任何纽扣时，强制保持在纽扣底座下方 (Z <= 0.075)
-            if (p.position.z > 0.075) {
-              p.position.z = 0.075;
-            }
           }
         }
       }

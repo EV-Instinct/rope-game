@@ -67,36 +67,36 @@ export class Rope {
     const dir = new THREE.Vector3().subVectors(end, start).normalize();
     const perp = new THREE.Vector3(-dir.y, dir.x, 0).normalize();
 
-    // 根据绳索 ID 设置初始三维层叠倾向 (Layer Ordering)，防止初始交叉穿模
+    // 根据绳索 ID 设置三维层叠微偏移，保持绳间清晰交叠但贴合绣布 (Cloth-level Layering)
     let layerZOffset = 0.0;
-    if (this.id === 6) layerZOffset = 0.06; // 紫6在顶部跨越
-    else if (this.id === 1) layerZOffset = 0.04; // 绿1在上层跨越
-    else if (this.id === 2) layerZOffset = 0.02; // 蓝2在中层
-    else if (this.id === 5) layerZOffset = 0.00; // 橙5在底层
+    if (this.id === 6) layerZOffset = 0.016; // 紫6在顶部跨越
+    else if (this.id === 1) layerZOffset = 0.011; // 绿1在上层跨越
+    else if (this.id === 2) layerZOffset = 0.006; // 蓝2在中层
+    else if (this.id === 5) layerZOffset = 0.000; // 橙5在底层
 
-    // 在两端点间按直线并施加初始微拱高插值质点
+    // 在两端点间按直线并施加微拱高插值质点
     for (let i = 0; i < this.numParticles; i++) {
       const alpha = i / (this.numParticles - 1);
       const pos = new THREE.Vector3().lerpVectors(start, end, alpha);
 
-      // 给中间质点微小 Z 抬升，确保处于布面上方并有层次感，最高峰在 0.16 左右，稳在纽扣 (0.22) 之下
-      const archZ = Math.sin(alpha * Math.PI) * (0.07 + layerZOffset) + this.radius;
-      pos.z = Math.max(0.04, archZ);
+      // 绳索平滑贴近绣布，最高点严格控制在 0.082 之下，永远居于原版扣子 (0.10~0.13) 底盘下方
+      const archZ = Math.sin(alpha * Math.PI) * (0.012 + layerZOffset) + this.radius;
+      pos.z = Math.max(0.065, Math.min(0.082, archZ));
 
-      // 初始螺旋麻花编织位移 (Double Helix Twist - 专为红4与粉3设计)
+      // 初始螺旋麻花编织位移 (Double Helix Twist - 专为红4与粉3设计，侧向缠绕为主)
       if (config.twistTurns) {
         const twistPhase = alpha * Math.PI * 2.0 * config.twistTurns;
-        const twistAmp = Math.sin(alpha * Math.PI) * 0.22;
+        const twistAmp = Math.sin(alpha * Math.PI) * 0.20;
         pos.addScaledVector(perp, Math.sin(twistPhase) * twistAmp);
-        pos.z += Math.cos(twistPhase) * twistAmp * 0.35;
+        pos.z += Math.cos(twistPhase) * twistAmp * 0.05;
       }
 
-      pos.z = Math.max(pos.z, this.radius);
+      pos.z = Math.max(0.065, Math.min(0.082, pos.z));
 
       // 端点初始固定 (invMass = 0)
       const isEndpoint = (i === 0 || i === this.numParticles - 1);
       if (isEndpoint) {
-        pos.z = 0.04;
+        pos.z = 0.07;
       }
       const invMass = isEndpoint ? 0.0 : 1.0;
 

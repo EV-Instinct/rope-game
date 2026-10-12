@@ -93,12 +93,14 @@ export class Rope {
 
       pos.z = Math.max(pos.z, this.radius);
 
-      // 端点初始扎入孔位深处 (Z=0.00)，保证绳头在纽扣底座下方入孔
+      // 端点初始扎入孔位深处 (Z=-0.015)，并且内侧质点 (i=1, N-2) 也保持在孔内 (Z=-0.010)，保证完全从纽扣底面穿入
       const isEndpoint = (i === 0 || i === this.numParticles - 1);
       if (isEndpoint) {
-        pos.z = 0.00;
+        pos.z = -0.015;
       } else if (i === 1 || i === this.numParticles - 2) {
-        pos.z = Math.min(pos.z, 0.04);
+        pos.z = -0.010;
+      } else if (i === 2 || i === this.numParticles - 3) {
+        pos.z = Math.min(pos.z, 0.025);
       }
       const invMass = isEndpoint ? 0.0 : 1.0;
 
@@ -135,7 +137,7 @@ export class Rope {
    */
   public updateAnchorA(pos: THREE.Vector3, isDragging: boolean = false): void {
     if (this.particles.length > 0) {
-      const z = isDragging ? pos.z : 0.00;
+      const z = isDragging ? pos.z : -0.015;
       this.particles[0].updatePosition(pos.x, pos.y, z);
     }
   }
@@ -145,7 +147,7 @@ export class Rope {
    */
   public updateAnchorB(pos: THREE.Vector3, isDragging: boolean = false): void {
     if (this.particles.length > 0) {
-      const z = isDragging ? pos.z : 0.00;
+      const z = isDragging ? pos.z : -0.015;
       this.particles[this.particles.length - 1].updatePosition(pos.x, pos.y, z);
     }
   }

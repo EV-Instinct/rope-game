@@ -63,8 +63,10 @@ export class RopeSolver {
   private integrateParticles(h: number): void {
     for (const rope of this.ropes) {
       if (rope.state !== 'active') continue;
+      const pCount = rope.particles.length;
 
-      for (const p of rope.particles) {
+      for (let i = 0; i < pCount; i++) {
+        const p = rope.particles[i];
         if (p.invMass === 0) continue;
 
         // 阻尼衰减
@@ -79,12 +81,20 @@ export class RopeSolver {
         // 显式积分推进一步
         p.position.addScaledVector(p.velocity, h);
 
-        // 刺绣底布碰撞与贴合 (Z >= 半径)
-        if (p.position.z < p.radius) {
-          p.position.z = p.radius;
-          p.velocity.z = 0;
-          p.velocity.x *= (1.0 - this.clothFriction);
-          p.velocity.y *= (1.0 - this.clothFriction);
+        // 孔位出线保护：紧邻两端锚点的质点 (i=1, N-2) 处于孔眼与纽扣底座下方，保持在孔内 Z <= -0.005
+        if (i === 1 || i === pCount - 2) {
+          if (p.position.z > -0.005) {
+            p.position.z = -0.005;
+            p.velocity.z = 0;
+          }
+        } else {
+          // 刺绣底布碰撞与贴合 (Z >= 半径)
+          if (p.position.z < p.radius) {
+            p.position.z = p.radius;
+            p.velocity.z = 0;
+            p.velocity.x *= (1.0 - this.clothFriction);
+            p.velocity.y *= (1.0 - this.clothFriction);
+          }
         }
       }
     }
@@ -102,6 +112,17 @@ export class RopeSolver {
       // 弯曲约束解算
       for (const bc of rope.bendingConstraints) {
         bc.solve();
+      }
+
+      // 保护孔口质点始终处于扣子底座深处 (Z <= -0.005)
+      const pCount = rope.particles.length;
+      if (pCount >= 4) {
+        if (rope.particles[1].position.z > -0.005) {
+          rope.particles[1].position.z = -0.005;
+        }
+        if (rope.particles[pCount - 2].position.z > -0.005) {
+          rope.particles[pCount - 2].position.z = -0.005;
+        }
       }
     }
   }
